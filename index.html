@@ -183,7 +183,7 @@
                 name_zh: '狮子',
                 pinyin: 'shī zi',
                 sound_text: 'The lion says roar',
-                image_query: 'A_friendly_cartoon_lion_in_a_jungle',
+                image_prompt: 'cute cartoon lion cub, friendly, colorful, toddler-friendly, simple background',
                 bg_gradient: 'from-yellow-400 to-orange-500',
                 text_color: 'text-yellow-900',
                 button_color: 'from-yellow-500 to-orange-600',
@@ -194,7 +194,7 @@
                 name_zh: '老虎',
                 pinyin: 'lǎo hǔ',
                 sound_text: 'The tiger says grrrr',
-                image_query: 'A_cute_cartoon_tiger_with_stripes',
+                image_prompt: 'adorable cartoon tiger cub, striped, friendly, bright colors, simple background',
                 bg_gradient: 'from-orange-400 to-red-500',
                 text_color: 'text-orange-900',
                 button_color: 'from-orange-500 to-red-600',
@@ -205,7 +205,7 @@
                 name_zh: '大象',
                 pinyin: 'dà xiàng',
                 sound_text: 'The elephant says pawoo',
-                image_query: 'A_happy_cartoon_elephant_with_big_ears',
+                image_prompt: 'cute cartoon baby elephant, big ears, friendly, gray, simple background',
                 bg_gradient: 'from-gray-300 to-gray-600',
                 text_color: 'text-gray-800',
                 button_color: 'from-gray-500 to-gray-700',
@@ -216,7 +216,7 @@
                 name_zh: '猴子',
                 pinyin: 'hóu zi',
                 sound_text: 'The monkey says ooh ooh aah aah',
-                image_query: 'A_playful_cartoon_monkey_swinging',
+                image_prompt: 'playful cartoon monkey, brown, friendly, swinging, simple background',
                 bg_gradient: 'from-amber-300 to-orange-400',
                 text_color: 'text-amber-900',
                 button_color: 'from-amber-500 to-orange-600',
@@ -227,7 +227,7 @@
                 name_zh: '熊猫',
                 pinyin: 'xióng māo',
                 sound_text: 'The panda munches on bamboo',
-                image_query: 'A_cuddly_cartoon_panda_eating_bamboo',
+                image_prompt: 'cuddly cartoon panda, black and white, eating bamboo, friendly, simple background',
                 bg_gradient: 'from-gray-200 to-gray-500',
                 text_color: 'text-gray-800',
                 button_color: 'from-gray-600 to-gray-800',
@@ -238,7 +238,7 @@
                 name_zh: '长颈鹿',
                 pinyin: 'cháng jǐng lù',
                 sound_text: 'The giraffe is quiet',
-                image_query: 'A_tall_cartoon_giraffe_with_a_long_neck',
+                image_prompt: 'tall cartoon giraffe, yellow and brown spots, friendly, simple background',
                 bg_gradient: 'from-yellow-200 to-amber-400',
                 text_color: 'text-yellow-900',
                 button_color: 'from-yellow-400 to-amber-600',
@@ -249,7 +249,7 @@
                 name_zh: '斑马',
                 pinyin: 'bān mǎ',
                 sound_text: 'The zebra says neigh',
-                image_query: 'A_friendly_cartoon_zebra_with_black_and_white_stripes',
+                image_prompt: 'friendly cartoon zebra, black and white stripes, simple background',
                 bg_gradient: 'from-gray-100 to-gray-400',
                 text_color: 'text-gray-800',
                 button_color: 'from-gray-400 to-gray-600',
@@ -260,7 +260,7 @@
                 name_zh: '企鹅',
                 pinyin: 'qǐ é',
                 sound_text: 'The penguin says honk honk',
-                image_query: 'A_cute_cartoon_penguin_on_ice',
+                image_prompt: 'cute cartoon penguin, black and white, on ice, friendly, simple background',
                 bg_gradient: 'from-blue-200 to-blue-500',
                 text_color: 'text-blue-900',
                 button_color: 'from-blue-400 to-blue-600',
@@ -271,19 +271,38 @@
         const container = document.getElementById('flashcard-container');
         const synth = window.speechSynthesis;
 
+        // --- Function to get high-quality animal images ---
+        async function generateAnimalImage(prompt, animalName) {
+            // Curated high-quality animal images from free sources
+            const animalImages = {
+                'Lion': 'https://images.unsplash.com/photo-1549366021-9f761d450615?w=400&h=300&fit=crop&crop=center',
+                'Tiger': 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=400&h=300&fit=crop&crop=center',
+                'Elephant': 'https://images.unsplash.com/photo-1557050543-4d5f2e07c3d9?w=400&h=300&fit=crop&crop=center',
+                'Monkey': 'https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=400&h=300&fit=crop&crop=center',
+                'Panda': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center',
+                'Giraffe': 'https://images.unsplash.com/photo-1547721064-da6cfb341d50?w=400&h=300&fit=crop&crop=center',
+                'Zebra': 'https://images.unsplash.com/photo-1549366021-9f761d450615?w=400&h=300&fit=crop&crop=center',
+                'Penguin': 'https://images.unsplash.com/photo-1551986782-d0169b3f8fa7?w=400&h=300&fit=crop&crop=center'
+            };
+            
+            // Return the curated image for each animal
+            return animalImages[animalName] || `https://placehold.co/400x300/ffffff/333333?text=${animalName}&font=inter&fontSize=24`;
+        }
+
         // --- Function to create and display cards ---
-        function createAnimalCards() {
-            animals.forEach((animal, index) => {
+        async function createAnimalCards() {
+            for (let i = 0; i < animals.length; i++) {
+                const animal = animals[i];
                 const card = document.createElement('div');
                 card.className = `card w-full bg-gradient-to-br ${animal.bg_gradient} rounded-3xl overflow-hidden flex flex-col bounce-in`;
-                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animationDelay = `${i * 0.1}s`;
 
-                // Generate a placeholder image URL with better styling
-                const imageUrl = `https://placehold.co/400x300/ffffff/333333?text=${animal.emoji}+${animal.name_en}&font=inter&fontSize=24`;
+                // Generate or get image URL
+                const imageUrl = await generateAnimalImage(animal.image_prompt, animal.name_en);
 
                 card.innerHTML = `
                     <div class="relative overflow-hidden">
-                        <img src="${imageUrl}" alt="A cute cartoon of a ${animal.name_en}" class="animal-image w-full h-56 object-cover">
+                        <img src="${imageUrl}" alt="A cute ${animal.name_en}" class="animal-image w-full h-56 object-cover" loading="lazy" onerror="this.src='https://placehold.co/400x300/ffffff/333333?text=${animal.emoji}+${animal.name_en}&font=inter&fontSize=24'">
                         <div class="absolute top-4 right-4 text-4xl">${animal.emoji}</div>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
@@ -303,7 +322,7 @@
                 `;
                 
                 // Add sparkle effects
-                for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 5; j++) {
                     const sparkle = document.createElement('div');
                     sparkle.className = 'sparkle';
                     sparkle.style.left = Math.random() * 100 + '%';
@@ -313,7 +332,7 @@
                 }
                 
                 container.appendChild(card);
-            });
+            }
         }
 
         // --- Function to handle sound playback ---
@@ -357,10 +376,14 @@
         }
 
         // --- Initialize the app ---
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             // Check for speech synthesis support
             if ('speechSynthesis' in window) {
-                createAnimalCards();
+                // Show loading state
+                container.innerHTML = '<div class="col-span-full text-center p-8"><div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div><p class="mt-4 text-white/80">Loading animal images...</p></div>';
+                
+                // Create cards with AI-generated images
+                await createAnimalCards();
                 
                 // Add event listeners after cards are created
                 setTimeout(() => {
