@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoo Animal Flash Cards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .play-button {
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .play-button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-emerald-50 text-gray-800">
+
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-emerald-700">Zoo Animal Flash Cards</h1>
+            <p class="text-lg text-emerald-600 mt-2">Click the speaker to hear the animal's name and sound!</p>
+        </header>
+
+        <main id="flashcard-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+            <!-- Animal cards will be injected here by JavaScript -->
+        </main>
+
+        <footer class="text-center mt-12 text-emerald-500">
+            <p>A fun learning game for toddlers.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Data for our animal flash cards ---
+        const animals = [
+            {
+                name_en: 'Lion',
+                name_zh: '狮子',
+                pinyin: 'shī zi',
+                sound_text: 'The lion says roar',
+                image_query: 'A_friendly_cartoon_lion_in_a_jungle',
+                bg_color: 'bg-yellow-100',
+                text_color: 'text-yellow-800',
+                button_color: 'bg-yellow-500',
+                button_hover: 'hover:bg-yellow-600',
+            },
+            {
+                name_en: 'Tiger',
+                name_zh: '老虎',
+                pinyin: 'lǎo hǔ',
+                sound_text: 'The tiger says grrrr',
+                image_query: 'A_cute_cartoon_tiger_with_stripes',
+                bg_color: 'bg-orange-100',
+                text_color: 'text-orange-800',
+                button_color: 'bg-orange-500',
+                button_hover: 'hover:bg-orange-600',
+            },
+            {
+                name_en: 'Elephant',
+                name_zh: '大象',
+                pinyin: 'dà xiàng',
+                sound_text: 'The elephant says pawoo',
+                image_query: 'A_happy_cartoon_elephant_with_big_ears',
+                bg_color: 'bg-gray-200',
+                text_color: 'text-gray-800',
+                button_color: 'bg-gray-500',
+                button_hover: 'hover:bg-gray-600',
+            },
+            {
+                name_en: 'Monkey',
+                name_zh: '猴子',
+                pinyin: 'hóu zi',
+                sound_text: 'The monkey says ooh ooh aah aah',
+                image_query: 'A_playful_cartoon_monkey_swinging',
+                bg_color: 'bg-amber-100',
+                text_color: 'text-amber-800',
+                button_color: 'bg-amber-500',
+                button_hover: 'hover:bg-amber-600',
+            },
+            {
+                name_en: 'Panda',
+                name_zh: '熊猫',
+                pinyin: 'xióng māo',
+                sound_text: 'The panda munches on bamboo',
+                image_query: 'A_cuddly_cartoon_panda_eating_bamboo',
+                bg_color: 'bg-zinc-200',
+                text_color: 'text-zinc-800',
+                button_color: 'bg-zinc-800',
+                button_hover: 'hover:bg-zinc-900',
+            },
+            {
+                name_en: 'Giraffe',
+                name_zh: '长颈鹿',
+                pinyin: 'cháng jǐng lù',
+                sound_text: 'The giraffe is quiet',
+                image_query: 'A_tall_cartoon_giraffe_with_a_long_neck',
+                bg_color: 'bg-yellow-50',
+                text_color: 'text-yellow-700',
+                button_color: 'bg-yellow-400',
+                button_hover: 'hover:bg-yellow-500',
+            },
+             {
+                name_en: 'Zebra',
+                name_zh: '斑马',
+                pinyin: 'bān mǎ',
+                sound_text: 'The zebra says neigh',
+                image_query: 'A_friendly_cartoon_zebra_with_black_and_white_stripes',
+                bg_color: 'bg-slate-100',
+                text_color: 'text-slate-800',
+                button_color: 'bg-slate-400',
+                button_hover: 'hover:bg-slate-500',
+            },
+            {
+                name_en: 'Penguin',
+                name_zh: '企鹅',
+                pinyin: 'qǐ é',
+                sound_text: 'The penguin says honk honk',
+                image_query: 'A_cute_cartoon_penguin_on_ice',
+                bg_color: 'bg-sky-100',
+                text_color: 'text-sky-800',
+                button_color: 'bg-sky-400',
+                button_hover: 'hover:bg-sky-500',
+            }
+        ];
+
+        const container = document.getElementById('flashcard-container');
+        const synth = window.speechSynthesis;
+
+        // --- Function to create and display cards ---
+        function createAnimalCards() {
+            animals.forEach(animal => {
+                const card = document.createElement('div');
+                card.className = `card w-full ${animal.bg_color} rounded-2xl overflow-hidden flex flex-col`;
+
+                // Generate a placeholder image URL
+                const imageUrl = `https://placehold.co/400x300/${animal.bg_color.split('-')[1]}00/333333?text=${animal.image_query.replace(/_/g, '%20')}&font=lora`;
+
+                card.innerHTML = `
+                    <div class="relative">
+                        <img src="${imageUrl}" alt="A cute cartoon of a ${animal.name_en}" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="p-4 flex-grow flex flex-col justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold ${animal.text_color}">${animal.name_en}</h2>
+                            <p class="text-xl font-semibold ${animal.text_color}">${animal.name_zh} <span class="text-lg font-normal opacity-75">${animal.pinyin}</span></p>
+                        </div>
+                        <button class="play-button w-full mt-4 p-3 rounded-lg text-white font-bold flex items-center justify-center ${animal.button_color} ${animal.button_hover}" data-en="${animal.name_en}" data-zh="${animal.name_zh}" data-sound="${animal.sound_text}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                            </svg>
+                            Play Sound
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- Function to handle sound playback ---
+        function playSound(event) {
+            // Cancel any previous speech
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            const button = event.currentTarget;
+            const nameEn = button.dataset.en;
+            const nameZh = button.dataset.zh;
+            const soundText = button.dataset.sound;
+
+            // Create utterances
+            const utteranceEn = new SpeechSynthesisUtterance(nameEn);
+            utteranceEn.lang = 'en-US';
+            utteranceEn.pitch = 1.2;
+            utteranceEn.rate = 0.9;
+
+            const utteranceZh = new SpeechSynthesisUtterance(nameZh);
+            utteranceZh.lang = 'zh-CN';
+            utteranceZh.pitch = 1;
+            utteranceZh.rate = 0.9;
+            
+            const utteranceSound = new SpeechSynthesisUtterance(soundText);
+            utteranceSound.lang = 'en-US';
+            utteranceSound.pitch = 1;
+            utteranceSound.rate = 1;
+
+            // Speak them in sequence
+            synth.speak(utteranceEn);
+            synth.speak(utteranceZh);
+            synth.speak(utteranceSound);
+        }
+
+        // --- Initialize the app ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for speech synthesis support
+            if ('speechSynthesis' in window) {
+                createAnimalCards();
+                const buttons = document.querySelectorAll('.play-button');
+                buttons.forEach(button => button.addEventListener('click', playSound));
+            } else {
+                container.innerHTML = '<p class="text-center text-red-500 col-span-full">Sorry, your browser does not support the speech synthesis feature required for this game.</p>';
+            }
+        });
+    </script>
+
+</body>
+</html>
