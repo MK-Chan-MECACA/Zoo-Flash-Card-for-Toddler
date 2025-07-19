@@ -1,0 +1,19 @@
+# Configuration files with sensitive data
+config.js
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# API keys and secrets
+*.key
+secrets.json
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db 
