@@ -6,7 +6,7 @@
     <title>Forest Animal Flash Cards</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="config.js"></script>
+    <script src="env-loader.js"></script>
     <style>
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
@@ -305,7 +305,7 @@
             }
             
             // Try DALL-E generation if config is available
-            if (typeof config !== 'undefined' && config.OPENAI_API_KEY) {
+            if (typeof config !== 'undefined' && config.OPENAI_API_KEY && config.OPENAI_API_KEY !== 'your-openai-api-key-here' && config.OPENAI_API_KEY !== null) {
                 try {
                     const response = await fetch('https://api.openai.com/v1/images/generations', {
                         method: 'POST',
