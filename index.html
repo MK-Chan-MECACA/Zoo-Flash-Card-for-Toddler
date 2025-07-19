@@ -273,7 +273,7 @@
         const synth = window.speechSynthesis;
 
         // --- Function to generate AI images using DALL-E ---
-        async function generateAnimalImage(prompt, animalName) {
+        async function generateAnimalImage(prompt, animalName, useFallbackFirst = false) {
             // Fallback to curated high-quality animal images
             const fallbackImages = {
                 'Lion': 'https://images.unsplash.com/photo-1549366021-9f761d450615?w=400&h=300&fit=crop&crop=center',
@@ -285,6 +285,11 @@
                 'Zebra': 'https://images.unsplash.com/photo-1549366021-9f761d450615?w=400&h=300&fit=crop&crop=center',
                 'Penguin': 'https://images.unsplash.com/photo-1551986782-d0169b3f8fa7?w=400&h=300&fit=crop&crop=center'
             };
+            
+            // If useFallbackFirst is true, return fallback immediately
+            if (useFallbackFirst) {
+                return fallbackImages[animalName] || `https://placehold.co/400x300/ffffff/333333?text=${animalName}&font=inter&fontSize=24`;
+            }
             
             // Try DALL-E generation if config is available
             if (typeof config !== 'undefined' && config.OPENAI_API_KEY) {
@@ -329,8 +334,8 @@
                 card.className = `card w-full bg-gradient-to-br ${animal.bg_gradient} rounded-3xl overflow-hidden flex flex-col bounce-in`;
                 card.style.animationDelay = `${i * 0.1}s`;
 
-                // Generate or get image URL
-                const imageUrl = await generateAnimalImage(animal.image_prompt, animal.name_en);
+                // Generate or get image URL (use fallback first for immediate display)
+                const imageUrl = await generateAnimalImage(animal.image_prompt, animal.name_en, true);
 
                 card.innerHTML = `
                     <div class="relative overflow-hidden">
@@ -411,10 +416,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             // Check for speech synthesis support
             if ('speechSynthesis' in window) {
-                // Show loading state
-                container.innerHTML = '<div class="col-span-full text-center p-8"><div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div><p class="mt-4 text-white/80">🎨 Generating AI animal images with DALL-E...</p></div>';
-                
-                // Create cards with AI-generated images
+                // Create cards immediately with fallback images
                 await createAnimalCards();
                 
                 // Add event listeners after cards are created
@@ -422,10 +424,51 @@
                     const buttons = document.querySelectorAll('.play-button');
                     buttons.forEach(button => button.addEventListener('click', playSound));
                 }, 100);
+                
+                // Update images with AI-generated ones in the background
+                updateImagesWithAI();
             } else {
                 container.innerHTML = '<div class="col-span-full text-center p-8 bg-red-500/20 rounded-3xl border-2 border-red-500/50"><p class="text-red-200 text-xl font-semibold">Sorry, your browser does not support the speech synthesis feature required for this game.</p></div>';
             }
         });
+
+        // --- Function to update images with AI-generated ones in background ---
+        async function updateImagesWithAI() {
+            const cards = document.querySelectorAll('.card');
+            
+            for (let i = 0; i < animals.length; i++) {
+                const animal = animals[i];
+                const card = cards[i];
+                const imgElement = card.querySelector('.animal-image');
+                
+                if (imgElement) {
+                    try {
+                        // Generate AI image in background
+                        const aiImageUrl = await generateAnimalImage(animal.image_prompt, animal.name_en);
+                        
+                        // Only update if it's a different URL (AI-generated)
+                        if (aiImageUrl && !aiImageUrl.includes('unsplash.com')) {
+                            // Add a subtle fade transition
+                            imgElement.style.transition = 'opacity 0.5s ease-in-out';
+                            imgElement.style.opacity = '0.7';
+                            
+                            // Update the image
+                            imgElement.src = aiImageUrl;
+                            
+                            // Restore opacity after image loads
+                            imgElement.onload = () => {
+                                imgElement.style.opacity = '1';
+                            };
+                        }
+                    } catch (error) {
+                        console.log('Background AI image generation failed for', animal.name_en);
+                    }
+                }
+                
+                // Add a small delay between requests to avoid rate limiting
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
     </script>
 
 </body>
