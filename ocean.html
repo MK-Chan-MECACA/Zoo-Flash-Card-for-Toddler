@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoo Animal Flash Cards</title>
+    <title>Ocean Animal Flash Cards</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="config.js"></script>
@@ -147,7 +147,7 @@
     <div class="container mx-auto px-4 py-8">
         <header class="text-center mb-12">
             <div class="floating mb-4">
-                <h1 class="text-5xl md:text-7xl font-black title-glow gradient-text">🦁 Zoo Animal Flash Cards 🐯</h1>
+                <h1 class="text-5xl md:text-7xl font-black title-glow gradient-text">🐠 Ocean Animal Flash Cards 🐋</h1>
             </div>
             <p class="text-xl md:text-2xl text-white/90 font-semibold mb-4">Click the speaker to hear the animal's name and sound!</p>
             <div class="flex justify-center items-center space-x-4 text-white/80">
@@ -191,95 +191,73 @@
     </div>
 
     <script>
-        // --- Data for our zoo animal flash cards ---
+        // --- Data for our ocean animal flash cards ---
         const animals = [
             {
-                name_en: 'Lion',
-                name_zh: '狮子',
-                pinyin: 'shī zi',
-                sound_text: 'The lion says roar',
-                image_prompt: 'A cute cartoon lion with golden mane and big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-yellow-400 to-orange-500',
-                text_color: 'text-yellow-900',
-                button_color: 'from-yellow-500 to-orange-600',
-                emoji: '🦁',
+                name_en: 'Dolphin',
+                name_zh: '海豚',
+                pinyin: 'hǎi tún',
+                sound_text: 'The dolphin clicks and whistles',
+                image_prompt: 'A cute cartoon dolphin with gray color and friendly smile, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
+                bg_gradient: 'from-blue-300 to-blue-600',
+                text_color: 'text-blue-900',
+                button_color: 'from-blue-500 to-blue-700',
+                emoji: '🐬',
             },
             {
-                name_en: 'Tiger',
-                name_zh: '老虎',
-                pinyin: 'lǎo hǔ',
-                sound_text: 'The tiger growls',
-                image_prompt: 'A cute cartoon tiger with orange fur and black stripes, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-orange-400 to-red-500',
+                name_en: 'Whale',
+                name_zh: '鲸鱼',
+                pinyin: 'jīng yú',
+                sound_text: 'The whale sings a deep song',
+                image_prompt: 'A cute cartoon whale with blue color and big body, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
+                bg_gradient: 'from-blue-400 to-blue-700',
+                text_color: 'text-blue-900',
+                button_color: 'from-blue-600 to-blue-800',
+                emoji: '🐋',
+            },
+            {
+                name_en: 'Shark',
+                name_zh: '鲨鱼',
+                pinyin: 'shā yú',
+                sound_text: 'The shark is quiet',
+                image_prompt: 'A cute cartoon shark with gray color and sharp teeth, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
+                bg_gradient: 'from-gray-400 to-gray-700',
+                text_color: 'text-gray-900',
+                button_color: 'from-gray-600 to-gray-800',
+                emoji: '🦈',
+            },
+            {
+                name_en: 'Octopus',
+                name_zh: '章鱼',
+                pinyin: 'zhāng yú',
+                sound_text: 'The octopus makes bubble sounds',
+                image_prompt: 'A cute cartoon octopus with purple color and eight tentacles, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
+                bg_gradient: 'from-purple-300 to-purple-600',
+                text_color: 'text-purple-900',
+                button_color: 'from-purple-500 to-purple-700',
+                emoji: '🐙',
+            },
+            {
+                name_en: 'Seahorse',
+                name_zh: '海马',
+                pinyin: 'hǎi mǎ',
+                sound_text: 'The seahorse is very quiet',
+                image_prompt: 'A cute cartoon seahorse with orange color and curly tail, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
+                bg_gradient: 'from-orange-300 to-orange-600',
                 text_color: 'text-orange-900',
-                button_color: 'from-orange-500 to-red-600',
-                emoji: '🐯',
+                button_color: 'from-orange-500 to-orange-700',
+                emoji: '🦄',
             },
             {
-                name_en: 'Elephant',
-                name_zh: '大象',
-                pinyin: 'dà xiàng',
-                sound_text: 'The elephant trumpets',
-                image_prompt: 'A cute cartoon elephant with gray color and long trunk, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-gray-400 to-gray-600',
-                text_color: 'text-gray-900',
-                button_color: 'from-gray-500 to-gray-700',
-                emoji: '🐘',
-            },
-            {
-                name_en: 'Giraffe',
-                name_zh: '长颈鹿',
-                pinyin: 'cháng jǐng lù',
-                sound_text: 'The giraffe is quiet',
-                image_prompt: 'A cute cartoon giraffe with yellow color and brown spots, long neck, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-yellow-300 to-orange-400',
-                text_color: 'text-yellow-900',
-                button_color: 'from-yellow-400 to-orange-500',
-                emoji: '🦒',
-            },
-            {
-                name_en: 'Monkey',
-                name_zh: '猴子',
-                pinyin: 'hóu zi',
-                sound_text: 'The monkey chatters',
-                image_prompt: 'A cute cartoon monkey with brown fur and long tail, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-amber-300 to-brown-500',
-                text_color: 'text-amber-900',
-                button_color: 'from-amber-400 to-brown-600',
-                emoji: '🐒',
-            },
-            {
-                name_en: 'Zebra',
-                name_zh: '斑马',
-                pinyin: 'bān mǎ',
-                sound_text: 'The zebra neighs',
-                image_prompt: 'A cute cartoon zebra with black and white stripes, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-gray-200 to-gray-400',
-                text_color: 'text-gray-800',
-                button_color: 'from-gray-300 to-gray-500',
-                emoji: '🦓',
-            },
-            {
-                name_en: 'Penguin',
-                name_zh: '企鹅',
-                pinyin: 'qǐ é',
-                sound_text: 'The penguin makes a sound',
-                image_prompt: 'A cute cartoon penguin with black and white color, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-gray-300 to-blue-400',
-                text_color: 'text-gray-900',
-                button_color: 'from-gray-400 to-blue-500',
-                emoji: '🐧',
-            },
-            {
-                name_en: 'Kangaroo',
-                name_zh: '袋鼠',
-                pinyin: 'dài shǔ',
-                sound_text: 'The kangaroo hops',
-                image_prompt: 'A cute cartoon kangaroo with brown fur and pouch, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
-                bg_gradient: 'from-amber-200 to-orange-400',
-                text_color: 'text-amber-900',
-                button_color: 'from-amber-300 to-orange-500',
-                emoji: '🦘',
+                name_en: 'Jellyfish',
+                name_zh: '水母',
+                pinyin: 'shuǐ mǔ',
+                sound_text: 'The jellyfish floats silently',
+                image_prompt: 'A cute cartoon jellyfish with pink color and flowing tentacles, big friendly eyes, sitting in a simple colorful background, digital art style, clean lines, bright colors, toddler-friendly, no text, centered composition, consistent cartoon aesthetic',
+                bg_gradient: 'from-pink-300 to-pink-600',
+                text_color: 'text-pink-900',
+                button_color: 'from-pink-500 to-pink-700',
+                emoji: '🪼',
             }
         ];
 
@@ -313,14 +291,12 @@
             
             // Fallback to curated high-quality animal images
             const fallbackImages = {
-                'Lion': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-                'Tiger': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-                'Elephant': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-                'Giraffe': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-                'Monkey': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-                'Zebra': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-                'Penguin': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
-                'Kangaroo': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center'
+                'Dolphin': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+                'Whale': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+                'Shark': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+                'Octopus': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+                'Seahorse': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center',
+                'Jellyfish': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop&crop=center'
             };
             
             // If useFallbackFirst is true, return fallback immediately
